@@ -17,7 +17,7 @@
 #include <primitives/transaction.h>
 #include <script/interpreter.h>
 #include <script/script.h>
-#include <key_io.h>                   // for DecodeDestination
+//#include <key_io.h>                   // for DecodeDestination
 #include <uint256.h>
 #include <util/chaintype.h>
 #include <util/strencodings.h>
@@ -28,7 +28,7 @@
 #include <cstring>
 #include <type_traits>
 
-//using namespace util::hex_literals;
+using namespace util::hex_literals;
 
 // Workaround MSVC bug triggering C7595 when calling consteval constructors in
 // initializer lists.
