@@ -196,9 +196,12 @@ public:
 
         consensus.hashGenesisBlock = genesis.GetHash();
 
+        LogPrintf("DEBUG: computed genesis hash = %s\n", consensus.hashGenesisBlock.GetHex());
+        LogPrintf("DEBUG: computed merkle root    = %s\n", genesis.hashMerkleRoot.GetHex());
+
         // TODO: After building genesis, update these:
-        assert(consensus.hashGenesisBlock == uint256("000009911f89be97d3b742434cd242c10cd1d81bac27f4fe9726c0ee40c0ef74"));
-        assert(genesis.hashMerkleRoot == uint256("d75678300d743af46f667714f33c77208f8b5f2d3bfdff5924825c6bb63c400d"));
+        assert(consensus.hashGenesisBlock == uint256("00000fb80675549a4e986d7410b90f6ef07719547a8f35d2948b2439b2cc3a76"));
+        assert(genesis.hashMerkleRoot == uint256("0174c899036d2ec344124c5ea9ec9ba8ccefd4f49fc44b3a0d8f73e805dc711e"));
 
 
         // Note that of those which support the service bits prefix, most only support a subset of
