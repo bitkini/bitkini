@@ -17,7 +17,6 @@
 #include <primitives/transaction.h>
 #include <script/interpreter.h>
 #include <script/script.h>
-#include <script/standard.h>          // for GetScriptForDestination
 #include <key_io.h>                   // for DecodeDestination
 #include <uint256.h>
 #include <util/chaintype.h>
@@ -29,7 +28,7 @@
 #include <cstring>
 #include <type_traits>
 
-using namespace util::hex_literals;
+//using namespace util::hex_literals;
 
 // Workaround MSVC bug triggering C7595 when calling consteval constructors in
 // initializer lists.
@@ -77,7 +76,7 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
     
     // Fun custom public key for the genesis coinbase tx
     const CScript genesisOutputScript = CScript()
-        << "041fabe7339d6264c96840f552a6a3c8c557e8817c7f6dd2f6fc5e793f983c07a6da3508cda692536bbc41aba4c638ec87a1c2f3292502d3405b1b849761bd0be1"_hex
+        << ParseHex("041fabe7339d6264c96840f552a6a3c8c557e8817c7f6dd2f6fc5e793f983c07a6da3508cda692536bbc41aba4c638ec87a1c2f3292502d3405b1b849761bd0be1")
         << OP_CHECKSIG;
 
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
@@ -144,8 +143,12 @@ public:
         //
 
         // Presale addresses
-        const CScript presale1Script = GetScriptForDestination(DecodeDestination("KPnFc2BtiFCoZPiBU9rE4ZyffKJAkd9cNT")); // Key #1
-        const CScript presale2Script = GetScriptForDestination(DecodeDestination("KRGHQNQgmDC9h8uUfZHHGzFNTtZaLQEhB2")); // Key #2
+        const CScript presale1Script = CScript()
+            << ParseHex("0206ad16bb0839765965b8fbfd054ae8ce8629aa524b142212a83451403f120333")
+            << OP_CHECKSIG;
+        const CScript presale2Script = CScript()
+            << ParseHex("026e2bbfc0f05c26f5c737d6bb274df52bdc42497e95aa66027123a6242b01a82f")
+            << OP_CHECKSIG;
 
         //
         // === PRESALE GENESIS CONSTRUCTION ===
