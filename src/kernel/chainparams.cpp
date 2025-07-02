@@ -73,7 +73,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     // 🌴 Bitkini: The degen summer chain is here
-    const char* pszTimestamp = "The Bitkini Times 23/Jun/2025 — Summer never ends on chain 🍹⛱️";
+    const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 — Summer never ends on chain 🍹⛱️";
     
     // Fun custom public key for the genesis coinbase tx
     const CScript genesisOutputScript = CScript()
@@ -167,7 +167,7 @@ public:
         coinbaseTx.vout.resize(3);
 
         // scriptSig: nBits, CScriptNum(4), timestamp
-        const char* pszTimestamp = "The Bitkini Times 23/Jun/2025 — Summer never ends on chain 🍹⛱️";
+        const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 — Summer never ends on chain 🍹⛱️";
         coinbaseTx.vin[0].scriptSig = CScript()
             << 486604799 << CScriptNum(4)
             << std::vector<unsigned char>((const unsigned char*)pszTimestamp,
