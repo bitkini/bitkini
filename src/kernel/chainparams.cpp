@@ -72,7 +72,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     // 🌴 Bitkini: The degen summer chain is here
-    const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 — Summer never ends on chain 🍹⛱️";
+    const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 - Summer never ends on chain";
     
     // Fun custom public key for the genesis coinbase tx
     const CScript genesisOutputScript = CScript()
@@ -154,10 +154,6 @@ public:
         // === PRESALE GENESIS CONSTRUCTION ===
         //
 
-        //modified!
-        //genesis = CreateGenesisBlock(1750696969, 1717859, 0x1e0ffff0, 1, 69 * COIN);
-        //consensus.hashGenesisBlock = genesis.GetHash();
-
         // Miner reward script (same as original genesis)
         const CScript minerScript = CScript()
             << ParseHex("041fabe7339d6264c96840f552a6a3c8c557e8817c7f6dd2f6fc5e793f983c07a6da3508cda692536bbc41aba4c638ec87a1c2f3292502d3405b1b849761bd0be1")
@@ -170,7 +166,7 @@ public:
         coinbaseTx.vout.resize(3);
 
         // scriptSig: nBits, CScriptNum(4), timestamp
-        const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 — Summer never ends on chain 🍹⛱️";
+        const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 - Summer never ends on chain";
         coinbaseTx.vin[0].scriptSig = CScript()
             << 486604799 << CScriptNum(4)
             << std::vector<unsigned char>((const unsigned char*)pszTimestamp,
@@ -188,7 +184,7 @@ public:
         genesis = CBlock();
         genesis.nTime    = 1751396969;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 507244;
+        genesis.nNonce   = 449215;
         genesis.nVersion = 1;
         genesis.vtx.push_back(MakeTransactionRef(std::move(coinbaseTx)));
         genesis.hashPrevBlock.SetNull();
@@ -200,8 +196,8 @@ public:
         LogPrintf("DEBUG: computed merkle root    = %s\n", genesis.hashMerkleRoot.GetHex());
 
         // TODO: After building genesis, update these:
-        assert(consensus.hashGenesisBlock == uint256("00000fb80675549a4e986d7410b90f6ef07719547a8f35d2948b2439b2cc3a76"));
-        assert(genesis.hashMerkleRoot == uint256("0174c899036d2ec344124c5ea9ec9ba8ccefd4f49fc44b3a0d8f73e805dc711e"));
+        assert(consensus.hashGenesisBlock == uint256("00000ace83430258795cd853bf627782dd4cf7f5fb41c42468c4c5f225e25398"));
+        assert(genesis.hashMerkleRoot == uint256("7fd704b6655faa08631c80f8c0850e62ff013046c15af4d286c0c24efcab3608"));
 
 
         // Note that of those which support the service bits prefix, most only support a subset of
