@@ -88,7 +88,7 @@ public:
         // allow exactly the same maximum target as your genesis
         consensus.powLimit = uint256{"0ffff00000000000000000000000000000000000000000000000000000000000"};
         //consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}; // previously had
-        consensus.nPowTargetTimespan = 60; // adjust every block (Bitkini Dynamic blocks and difficulty)
+        consensus.nPowTargetTimespan = 30 * 60; // adjust every 30 blocks (Bitkini Dynamic blocks and difficulty - ASIC RESISTANT)
         consensus.nPowTargetSpacing = 60; // apply the Bitkini 1-minute blocks
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.enforce_BIP94 = false;
