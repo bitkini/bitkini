@@ -45,10 +45,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     txNew.version = 1;
     txNew.vin.resize(1);
     txNew.vout.resize(1);
-    txNew.vin[0].scriptSig = CScript()
-        << 486604799 << CScriptNum(4)
-        << std::vector<unsigned char>((const unsigned char*)pszTimestamp,
-                                      (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+    txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
     txNew.vout[0].nValue = genesisReward;
     txNew.vout[0].scriptPubKey = genesisOutputScript;
 
@@ -63,22 +60,10 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     return genesis;
 }
 
-/**
- * Bitkini Genesis
- * Build the genesis block. Note that the output of its generation
- * transaction cannot be spent since it did not originally exist in the
- * database.
- */
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
-    // 🌴 Bitkini: The degen summer chain is here
-    const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 - Summer never ends on chain";
-    
-    // Fun custom public key for the genesis coinbase tx
-    const CScript genesisOutputScript = CScript()
-        << ParseHex("041fabe7339d6264c96840f552a6a3c8c557e8817c7f6dd2f6fc5e793f983c07a6da3508cda692536bbc41aba4c638ec87a1c2f3292502d3405b1b849761bd0be1")
-        << OP_CHECKSIG;
-
+    const char* pszTimestamp = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks";
+    const CScript genesisOutputScript = CScript() << "04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f"_hex << OP_CHECKSIG;
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
@@ -100,7 +85,9 @@ public:
         consensus.CSVHeight = 0; // Bitkini start
         consensus.SegwitHeight = 0; // Bitkini start
         consensus.MinBIP9WarningHeight = 0; // Bitkini start
-        consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
+        // allow exactly the same maximum target as your genesis
+        consensus.powLimit = uint256{"0ffff00000000000000000000000000000000000000000000000000000000000"};
+        //consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}; // previously had
         consensus.nPowTargetTimespan = 60; // adjust every block (Bitkini Dynamic blocks and difficulty)
         consensus.nPowTargetSpacing = 60; // apply the Bitkini 1-minute blocks
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -144,10 +131,10 @@ public:
 
         // Presale addresses
         const CScript presale1Script = CScript()
-            << ParseHex("0206ad16bb0839765965b8fbfd054ae8ce8629aa524b142212a83451403f120333")
+            << ParseHex("036252801979575c210f3afcfb41d0de3c42f564324b1c56771d386acb299145ae")
             << OP_CHECKSIG;
         const CScript presale2Script = CScript()
-            << ParseHex("026e2bbfc0f05c26f5c737d6bb274df52bdc42497e95aa66027123a6242b01a82f")
+            << ParseHex("03971283866ba8f38da488e5ed2a10904ed6ea32c954ea5b0187cc94466f467f72")
             << OP_CHECKSIG;
 
         //
@@ -156,7 +143,7 @@ public:
 
         // Miner reward script (same as original genesis)
         const CScript minerScript = CScript()
-            << ParseHex("041fabe7339d6264c96840f552a6a3c8c557e8817c7f6dd2f6fc5e793f983c07a6da3508cda692536bbc41aba4c638ec87a1c2f3292502d3405b1b849761bd0be1")
+            << ParseHex("027121c6a14f720c9920d26ba59b1c4ad8be2e8d5eb3c0e77376d8c6706830d500")
             << OP_CHECKSIG;
 
         // Build custom coinbase transaction
@@ -184,20 +171,25 @@ public:
         genesis = CBlock();
         genesis.nTime    = 1751396969;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 449215;
+        genesis.nNonce   = 488237;
         genesis.nVersion = 1;
         genesis.vtx.push_back(MakeTransactionRef(std::move(coinbaseTx)));
         genesis.hashPrevBlock.SetNull();
         genesis.hashMerkleRoot = BlockMerkleRoot(genesis);
 
         consensus.hashGenesisBlock = genesis.GetHash();
+        // DEBUG: force-print exactly what we computed
+        fprintf(stderr, ">>> C++ genesis hash   = %s\n",
+                consensus.hashGenesisBlock.GetHex().c_str());
+        fprintf(stderr, ">>> C++ merkle root    = %s\n",
+                genesis.hashMerkleRoot.GetHex().c_str());
 
         LogPrintf("DEBUG: computed genesis hash = %s\n", consensus.hashGenesisBlock.GetHex());
         LogPrintf("DEBUG: computed merkle root    = %s\n", genesis.hashMerkleRoot.GetHex());
 
         // TODO: After building genesis, update these:
-        assert(consensus.hashGenesisBlock == uint256("00000ace83430258795cd853bf627782dd4cf7f5fb41c42468c4c5f225e25398"));
-        assert(genesis.hashMerkleRoot == uint256("7fd704b6655faa08631c80f8c0850e62ff013046c15af4d286c0c24efcab3608"));
+        assert(consensus.hashGenesisBlock == uint256("00000592246a2bd6a30b6817e2dc87df21a9c1a32664e891fe201c2e74c7b47e"));
+        assert(genesis.hashMerkleRoot == uint256("85a0a67d2a9c1663fce6630bbbf68dce409b2292a9e2c79d55041902c5a5fac2"));
 
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -241,16 +233,16 @@ public:
         m_chain_type = ChainType::TESTNET;
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
-        consensus.nSubsidyHalvingInterval = 210000; // ~145 days at 1-min blocks for Bitkini
+        consensus.nSubsidyHalvingInterval = 210000;
         consensus.script_flag_exceptions.emplace( // BIP16 exception
             uint256{"00000000dd30457c001f4095d208cc1296b0eed002427aa599874af7a432b105"}, SCRIPT_VERIFY_NONE);
-        consensus.BIP34Height = 0;
+        consensus.BIP34Height = 21111;
         consensus.BIP34Hash = uint256{"0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8"};
-        consensus.BIP65Height = 0; /// Bitkini start
-        consensus.BIP66Height = 0; /// Bitkini start
-        consensus.CSVHeight = 0; // Bitkini start
-        consensus.SegwitHeight = 0; // Bitkini start
-        consensus.MinBIP9WarningHeight = 0; // Bitkini start
+        consensus.BIP65Height = 581885; // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
+        consensus.BIP66Height = 330776; // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
+        consensus.CSVHeight = 770112; // 00000000025e930139bac5c6c31a403776da130831ab85be56578f3fa75369bb
+        consensus.SegwitHeight = 834624; // 00000000002b980fcd729daaa248fd9316a5200e9b367f4ff2c42453e84201ca
+        consensus.MinBIP9WarningHeight = 836640; // segwit activation height + miner confirmation window
         consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
@@ -284,10 +276,10 @@ public:
         m_assumed_blockchain_size = 200;
         m_assumed_chain_state_size = 19;
 
-        genesis = CreateGenesisBlock(1750700707, 303030, 0x1e0ffff0, 1, 69 * COIN);
+        genesis = CreateGenesisBlock(1296688602, 414098458, 0x1d00ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256("00000fb80675549a4e986d7410b90f6ef07719547a8f35d2948b2439b2cc3a76"));
-        assert(genesis.hashMerkleRoot == uint256("0174c899036d2ec344124c5ea9ec9ba8ccefd4f49fc44b3a0d8f73e805dc711e"));
+        assert(consensus.hashGenesisBlock == uint256{"000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"});
+        assert(genesis.hashMerkleRoot == uint256{"4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"});
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -348,7 +340,7 @@ public:
         consensus.MinBIP9WarningHeight = 0;
         consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"};
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
-        consensus.nPowTargetSpacing = 60;
+        consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.enforce_BIP94 = true;
         consensus.fPowNoRetargeting = false;
@@ -617,10 +609,10 @@ public:
             consensus.vDeployments[deployment_pos].min_activation_height = version_bits_params.min_activation_height;
         }
 
-        genesis = CreateGenesisBlock(1750700707, 234512, 0x207fffff, 1, 69 * COIN);
+        genesis = CreateGenesisBlock(1296688602, 2, 0x207fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256("0f35651fef89eb157a743ba4b9c30ed3f6dd04ab4a3e6c2b6f2c4d3e4c3a8e89"));
-        assert(genesis.hashMerkleRoot == uint256("d75678300d743af46f667714f33c77208f8b5f2d3bfdff5924825c6bb63c400d"));
+        assert(consensus.hashGenesisBlock == uint256{"0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"});
+        assert(genesis.hashMerkleRoot == uint256{"4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"});
 
         vFixedSeeds.clear(); //!< Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();
@@ -667,6 +659,7 @@ public:
         bech32_hrp = "bcrt";
     }
 };
+
 
 std::unique_ptr<const CChainParams> CChainParams::SigNet(const SigNetOptions& options)
 {
