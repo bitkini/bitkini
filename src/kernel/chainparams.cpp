@@ -171,7 +171,7 @@ public:
         genesis = CBlock();
         genesis.nTime    = 1751396969;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 488237;
+        genesis.nNonce   = 255864;
         genesis.nVersion = 1;
         genesis.vtx.push_back(MakeTransactionRef(std::move(coinbaseTx)));
         genesis.hashPrevBlock.SetNull();
@@ -188,8 +188,8 @@ public:
         LogPrintf("DEBUG: computed merkle root    = %s\n", genesis.hashMerkleRoot.GetHex());
 
         // TODO: After building genesis, update these:
-        assert(consensus.hashGenesisBlock == uint256("00000592246a2bd6a30b6817e2dc87df21a9c1a32664e891fe201c2e74c7b47e"));
-        assert(genesis.hashMerkleRoot == uint256("85a0a67d2a9c1663fce6630bbbf68dce409b2292a9e2c79d55041902c5a5fac2"));
+        assert(consensus.hashGenesisBlock == uint256("00000292ec1910ddc2fb36b9202dd15eb87ec5e3f4749b2beaf5c1ae5592aca3"));
+        assert(genesis.hashMerkleRoot == uint256("878b2a7dc2d1c81d06089f5ac832ebd70d13693013f36d015c51ec1c4f8fd660"));
 
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -198,6 +198,8 @@ public:
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
         vSeeds.emplace_back("seed.bitkini.lol."); // Official Seed provided by Bitkini dev 
+        vSeeds.emplace_back("kini.bithidden.com."); // Another Seed provided by Bitkini dev
+
         //vSeeds.emplace_back("additional.seed.com."); // Second and third..
         // [Support the network and contact us team@bitkini.lol to add your node to repo]
 
