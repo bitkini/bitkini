@@ -116,11 +116,11 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0xf9;
-        pchMessageStart[1] = 0xbe;
-        pchMessageStart[2] = 0xb4;
-        pchMessageStart[3] = 0xd9;
-        nDefaultPort = 8333;
+        pchMessageStart[0] = 0x4B; // 'K'
+        pchMessageStart[1] = 0x49; // 'I'
+        pchMessageStart[2] = 0x4E; // 'N'
+        pchMessageStart[3] = 0x49; // 'I'
+        nDefaultPort = 6969; // Keep it sexy
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 720;
         m_assumed_chain_state_size = 14;
