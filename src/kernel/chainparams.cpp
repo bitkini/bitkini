@@ -197,10 +197,10 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
+        vSeeds.clear();
         vSeeds.emplace_back("seed.bitkini.lol."); // Official Seed provided by Bitkini dev 
         vSeeds.emplace_back("kini.bithidden.com."); // Another Seed provided by Bitkini dev
-
-        //vSeeds.emplace_back("additional.seed.com."); // Second and third..
+        vFixedSeeds.clear();
         // [Support the network and contact us team@bitkini.lol to add your node to repo]
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,45); // Lets fucking start Bitkini with K - why not?
@@ -210,8 +210,6 @@ public:
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
         bech32_hrp = "kini";
-
-        vFixedSeeds = std::vector<uint8_t>(std::begin(chainparams_seed_main), std::end(chainparams_seed_main));
 
         fDefaultConsistencyChecks = false;
         m_is_mockable_chain = false;
