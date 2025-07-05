@@ -125,32 +125,37 @@ public:
         m_assumed_blockchain_size = 720;
         m_assumed_chain_state_size = 14;
 
-        //
-        // === PRESALE GENESIS CONSTRUCTION ===
-        //
-
         // Presale addresses
-        const CScript presale1Script = CScript()
-            << ParseHex("036252801979575c210f3afcfb41d0de3c42f564324b1c56771d386acb299145ae")
-            << OP_CHECKSIG;
-        const CScript presale2Script = CScript()
-            << ParseHex("03971283866ba8f38da488e5ed2a10904ed6ea32c954ea5b0187cc94466f467f72")
-            << OP_CHECKSIG;
 
-        //
-        // === PRESALE GENESIS CONSTRUCTION ===
-        //
+        // 1) ParseHex into a temp vector:
+        //std::vector<unsigned char> spk1 = ParseHex("00145cd1d083a6097ddd1248b1f61f255a42b5475bcf");
+        // 2) Use the iterator-based CScript ctor:
+        //const CScript presale1Script(spk1.begin(), spk1.end());
 
-        // Miner reward script (same as original genesis)
-        const CScript minerScript = CScript()
-            << ParseHex("027121c6a14f720c9920d26ba59b1c4ad8be2e8d5eb3c0e77376d8c6706830d500")
-            << OP_CHECKSIG;
+        //std::vector<unsigned char> spk2 = ParseHex("0014b7a69b7ab89fb23b45577766687bd82e59f316b8");
+        //const CScript presale2Script(spk2.begin(), spk2.end());
+        // UPDATE: Because genesis generated coins are unspendable - UTXO can't read block 0 inputs 
+        // and even if we force nodes to read those transactions and validate - it's a big security issue for a chain.
+        // We will do a premine instead as this is the safest option.
+
+         // === PREMINE PHASE ===
+        // Mine blocks 1 through 435 at 6900 KINI each - to accumulate 3001500 KINI coins (Lower than 10% of max supply!)
+        consensus.nPremineEndBlock   = 435;
+        consensus.nPremineSubsidy    =   6900;
+        // 2 Presale Addresses will be announced and 1 TREASURY address for the purpose of future exchange listings will be public.
+        // Track the dev wallet for validations!
+        
+        
+
+        // Miner reward script
+        std::vector<unsigned char> spk3 = ParseHex("00147f1ccff5d5fee077e1f2a1240d7404dfc5c288fa");
+        const CScript minerScript(spk3.begin(), spk3.end());
 
         // Build custom coinbase transaction
         CMutableTransaction coinbaseTx;
         coinbaseTx.version = 1;
         coinbaseTx.vin.resize(1);
-        coinbaseTx.vout.resize(3);
+        coinbaseTx.vout.resize(1); //only one output - standard miner reward /unaccessible/
 
         // scriptSig: nBits, CScriptNum(4), timestamp
         const char* pszTimestamp = "The Bitkini Times 01/Jul/2025 - Summer never ends on chain";
@@ -159,19 +164,15 @@ public:
             << std::vector<unsigned char>((const unsigned char*)pszTimestamp,
                                           (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
 
-        // Outputs: presale1, presale2, miner
-        coinbaseTx.vout[0].nValue       = 1'000'000 * COIN;
-        coinbaseTx.vout[0].scriptPubKey = presale1Script;
-        coinbaseTx.vout[1].nValue       = 1'000'000 * COIN;
-        coinbaseTx.vout[1].scriptPubKey = presale2Script;
-        coinbaseTx.vout[2].nValue       =      69 * COIN;
-        coinbaseTx.vout[2].scriptPubKey = minerScript;
+        // Outputs:  miner
+        coinbaseTx.vout[0].nValue       = 69 * COIN;
+        coinbaseTx.vout[0].scriptPubKey = minerScript;
 
         // Assemble genesis block
         genesis = CBlock();
         genesis.nTime    = 1751396969;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 255864;
+        genesis.nNonce   = 3140;
         genesis.nVersion = 1;
         genesis.vtx.push_back(MakeTransactionRef(std::move(coinbaseTx)));
         genesis.hashPrevBlock.SetNull();
@@ -188,8 +189,8 @@ public:
         LogPrintf("DEBUG: computed merkle root    = %s\n", genesis.hashMerkleRoot.GetHex());
 
         // TODO: After building genesis, update these:
-        assert(consensus.hashGenesisBlock == uint256("00000292ec1910ddc2fb36b9202dd15eb87ec5e3f4749b2beaf5c1ae5592aca3"));
-        assert(genesis.hashMerkleRoot == uint256("878b2a7dc2d1c81d06089f5ac832ebd70d13693013f36d015c51ec1c4f8fd660"));
+        assert(consensus.hashGenesisBlock == uint256("000005ba381a0830bb497694c8488c81d86212f699ee6facdd057df7832a367f"));
+        assert(genesis.hashMerkleRoot == uint256("d74e8aa5f6f6e2d29b00ff6039d95f0a9ff1d436961fc5f0abb18117a20f7c08"));
 
 
         // Note that of those which support the service bits prefix, most only support a subset of

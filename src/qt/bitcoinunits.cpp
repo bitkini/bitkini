@@ -1,3 +1,4 @@
+// Copyright (c) 2025 The Bitkini Core developer
 // Copyright (c) 2011-2021 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -31,10 +32,10 @@ QList<BitcoinUnit> BitcoinUnits::availableUnits()
 QString BitcoinUnits::longName(Unit unit)
 {
     switch (unit) {
-    case Unit::BTC: return QString("BTC");
-    case Unit::mBTC: return QString("mBTC");
-    case Unit::uBTC: return QString::fromUtf8("µBTC (bits)");
-    case Unit::SAT: return QString("Satoshi (sat)");
+    case Unit::BTC:  return QString("KINI");
+    case Unit::mBTC: return QString("mKINI");
+    case Unit::uBTC: return QString::fromUtf8("µKINI (bits)");
+    case Unit::SAT:  return QString("Satoshi (sat)");
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }
@@ -42,10 +43,10 @@ QString BitcoinUnits::longName(Unit unit)
 QString BitcoinUnits::shortName(Unit unit)
 {
     switch (unit) {
-    case Unit::BTC: return longName(unit);
+    case Unit::BTC:  return longName(unit);
     case Unit::mBTC: return longName(unit);
     case Unit::uBTC: return QString("bits");
-    case Unit::SAT: return QString("sat");
+    case Unit::SAT:  return QString("sat");
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }
@@ -53,10 +54,10 @@ QString BitcoinUnits::shortName(Unit unit)
 QString BitcoinUnits::description(Unit unit)
 {
     switch (unit) {
-    case Unit::BTC: return QString("Bitcoins");
-    case Unit::mBTC: return QString("Milli-Bitcoins (1 / 1" THIN_SP_UTF8 "000)");
-    case Unit::uBTC: return QString("Micro-Bitcoins (bits) (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
-    case Unit::SAT: return QString("Satoshi (sat) (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+    case Unit::BTC:  return QString("Bitkini (KINI)");
+    case Unit::mBTC: return QString("Milli-Bitkini (1 / 1" THIN_SP_UTF8 "000)");
+    case Unit::uBTC: return QString("Micro-Bitkini (bits) (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+    case Unit::SAT:  return QString("Satoshi (sat) (1 / 100" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }
@@ -64,10 +65,10 @@ QString BitcoinUnits::description(Unit unit)
 qint64 BitcoinUnits::factor(Unit unit)
 {
     switch (unit) {
-    case Unit::BTC: return 100'000'000;
+    case Unit::BTC:  return 100'000'000;
     case Unit::mBTC: return 100'000;
     case Unit::uBTC: return 100;
-    case Unit::SAT: return 1;
+    case Unit::SAT:  return 1;
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }
@@ -75,10 +76,10 @@ qint64 BitcoinUnits::factor(Unit unit)
 int BitcoinUnits::decimals(Unit unit)
 {
     switch (unit) {
-    case Unit::BTC: return 8;
+    case Unit::BTC:  return 8;
     case Unit::mBTC: return 5;
     case Unit::uBTC: return 2;
-    case Unit::SAT: return 0;
+    case Unit::SAT:  return 0;
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }
@@ -232,10 +233,10 @@ namespace {
 qint8 ToQint8(BitcoinUnit unit)
 {
     switch (unit) {
-    case BitcoinUnit::BTC: return 0;
+    case BitcoinUnit::BTC:  return 0;
     case BitcoinUnit::mBTC: return 1;
     case BitcoinUnit::uBTC: return 2;
-    case BitcoinUnit::SAT: return 3;
+    case BitcoinUnit::SAT:  return 3;
     } // no default case, so the compiler can warn about missing cases
     assert(false);
 }

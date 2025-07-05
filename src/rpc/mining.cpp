@@ -1132,21 +1132,34 @@ static RPCHelpMan submitheader()
 
 void RegisterMiningRPCCommands(CRPCTable& t)
 {
-    static const CRPCCommand commands[]{
-        {"mining", &getnetworkhashps},
-        {"mining", &getmininginfo},
-        {"mining", &prioritisetransaction},
-        {"mining", &getprioritisedtransactions},
-        {"mining", &getblocktemplate},
-        {"mining", &submitblock},
-        {"mining", &submitheader},
-
-        {"hidden", &generatetoaddress},
-        {"hidden", &generatetodescriptor},
-        {"hidden", &generateblock},
-        {"hidden", &generate},
+    // Core mining RPCs always available on all networks
+    static const CRPCCommand coreCommands[] = {
+        {"mining",             &getnetworkhashps},
+        {"mining",             &getmininginfo},
+        {"mining",             &prioritisetransaction},
+        {"mining",             &getprioritisedtransactions},
+        {"mining",             &getblocktemplate},
+        {"mining",             &submitblock},
+        {"mining",             &submitheader},
     };
-    for (const auto& c : commands) {
-        t.appendCommand(c.name, &c);
+
+    // Hidden RPCs for instant block generation — ONLY on REGTEST
+    static const CRPCCommand hiddenCommands[] = {
+        {"hidden",             &generatetoaddress},
+        {"hidden",             &generatetodescriptor},
+        {"hidden",             &generateblock},
+        {"hidden",             &generate},
+    };
+
+    // Register core commands unconditionally
+    for (const auto& cmd : coreCommands) {
+        t.appendCommand(cmd.name, &cmd);
+    }
+
+    // Register hidden instant-mine commands only in regtest mode
+    if (Params().GetChainType() == ChainType::REGTEST) {
+        for (const auto& cmd : hiddenCommands) {
+            t.appendCommand(cmd.name, &cmd);
+        }
     }
 }

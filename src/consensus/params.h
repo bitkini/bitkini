@@ -1,3 +1,4 @@
+// Copyright (c) 2025 Bitkini Dev 0xMuted
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2022 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -110,6 +111,11 @@ struct Params {
     /** Proof of work parameters */
     uint256 powLimit;
     bool fPowAllowMinDifficultyBlocks;
+
+    // === NEW: premine phase ===
+    uint32_t nPremineEndBlock;
+    int64_t  nPremineSubsidy;
+
     /**
       * Enforce BIP94 timewarp attack mitigation. On testnet4 this also enforces
       * the block storm mitigation.
@@ -156,3 +162,4 @@ struct Params {
 } // namespace Consensus
 
 #endif // BITCOIN_CONSENSUS_PARAMS_H
+

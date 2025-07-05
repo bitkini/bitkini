@@ -1,3 +1,4 @@
+// Copyright (c) 2025 Bitkini Dev 0xMuted
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-present The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -1941,13 +1942,16 @@ PackageMempoolAcceptResult ProcessNewPackage(Chainstate& active_chainstate, CTxM
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 {
-    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
-    // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64)
-        return 0;
+    // 1) Premine phase (skip nHeight == 0, that's genesis):
+    if (nHeight > 0 && nHeight <= (int)consensusParams.nPremineEndBlock) {
+        return CAmount(consensusParams.nPremineSubsidy) * COIN;
+    }
 
-    CAmount nSubsidy = 69 * COIN; // Bitkini reward
-    // Subsidy is cut in half every 210,000 blocks which will occur approximately every 4 years.
+    // 2) After premine, normal 69 KINI → halving curve:
+    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+    if (halvings >= 64) return 0;
+
+    CAmount nSubsidy = 69 * COIN;
     nSubsidy >>= halvings;
     return nSubsidy;
 }
