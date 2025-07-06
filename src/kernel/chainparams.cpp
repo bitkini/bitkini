@@ -199,8 +199,8 @@ public:
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
         vSeeds.clear();
-        vSeeds.emplace_back("seed.bitkini.lol."); // Official Seed provided by Bitkini dev 
-        vSeeds.emplace_back("kini.bithidden.com."); // Another Seed provided by Bitkini dev
+        vSeeds.emplace_back("seed.bitkini.lol"); // Official Seed provided by Bitkini dev 
+        vSeeds.emplace_back("kini.bithidden.com"); // Another Seed provided by Bitkini dev
         vFixedSeeds.clear();
         // [Support the network and contact us team@bitkini.lol to add your node to repo]
 
