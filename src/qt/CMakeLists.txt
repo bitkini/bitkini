@@ -5,8 +5,8 @@
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   enable_language(OBJCXX)
   set(CMAKE_OBJCXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-  set(CMAKE_OBJCXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-  set(CMAKE_OBJCXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+  set(CMAKE_OBJCXX_FLAGS_RELEASE    "${CMAKE_CXX_FLAGS_RELEASE}")
+  set(CMAKE_OBJCXX_FLAGS_DEBUG      "${CMAKE_CXX_FLAGS_DEBUG}")
   set(CMAKE_OBJCXX_FLAGS_MINSIZEREL "${CMAKE_CXX_FLAGS_MINSIZEREL}")
   string(APPEND CMAKE_OBJCXX_COMPILE_OBJECT " ${APPEND_CPPFLAGS} ${APPEND_CXXFLAGS}")
 endif()
@@ -142,8 +142,8 @@ target_link_libraries(bitcoinqt
     leveldb
     Boost::headers
     $<TARGET_NAME_IF_EXISTS:QRencode::QRencode>
-    $<$<PLATFORM_ID:Darwin>:-framework\ AppKit>
-    $<$<CXX_COMPILER_ID:MSVC>:shlwapi>
+    $<$<PLATFORM_ID:Darwin>:-framework AppKit>
+    $<$<PLATFORM_ID:Windows>:shlwapi>
 )
 
 if(ENABLE_WALLET)
@@ -222,8 +222,6 @@ if(WITH_DBUS)
 endif()
 
 if(qt_lib_type STREQUAL "STATIC_LIBRARY")
-  # We want to define static plugins to link ourselves, thus preventing
-  # automatic linking against a "sane" set of default static plugins.
   qt6_import_plugins(bitcoinqt
     EXCLUDE_BY_TYPE
       accessiblebridge
@@ -305,7 +303,6 @@ function(get_translatable_sources var)
     get_target_property(target_sources ${target} SOURCES)
     if(target_sources)
       foreach(source IN LISTS target_sources)
-        # Get an expression from the generator expression, if any.
         if(source MATCHES ":([^>]+)>$")
           set(source ${CMAKE_MATCH_1})
         endif()
