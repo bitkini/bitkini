@@ -79,15 +79,13 @@ public:
         consensus.nSubsidyHalvingInterval = 210000;
         consensus.script_flag_exceptions.clear(); // Fixed so no idiot can exploit the chain. LOL.
         consensus.BIP34Height = 0;
-        consensus.BIP34Hash = uint256{"0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8"};
+        consensus.BIP34Hash = uint256{"000005ba381a0830bb497694c8488c81d86212f699ee6facdd057df7832a367f"}; // Bitkini genesis
         consensus.BIP65Height = 0; /// Bitkini start
         consensus.BIP66Height = 0; /// Bitkini start
         consensus.CSVHeight = 0; // Bitkini start
         consensus.SegwitHeight = 0; // Bitkini start
         consensus.MinBIP9WarningHeight = 0; // Bitkini start
-        // allow exactly the same maximum target as your genesis
         consensus.powLimit = uint256{"0ffff00000000000000000000000000000000000000000000000000000000000"};
-        //consensus.powLimit = uint256{"00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}; // previously had
         consensus.nPowTargetTimespan = 30 * 60; // adjust every 30 blocks (Bitkini Dynamic blocks and difficulty - ASIC RESISTANT)
         consensus.nPowTargetSpacing = 60; // apply the Bitkini 1-minute blocks
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -102,11 +100,11 @@ public:
 
         // Deployment of Taproot (BIPs 340-342)
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 1619222400; // April 24th, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1628640000; // August 11th, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 709632; // Approximately November 12th, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].threshold = 1815; // 90%
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].period = 2016;
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 1752506615; // July 14th, 2025
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1893456000; // Jan 1 2030
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 3000; // Approximately November 12th, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].threshold = 90; // 90%
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].period = 100;
 
         consensus.nMinimumChainWork = uint256{};
         consensus.defaultAssumeValid = uint256{}; // removing the hardcoded bug fix from bitcoin - We do not need this for Bitkini..

@@ -236,6 +236,12 @@ static RPCHelpMan generatetodescriptor()
             "\nGenerate 11 blocks to mydesc\n" + HelpExampleCli("generatetodescriptor", "11 \"mydesc\"")},
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {
+    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
+    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
+        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generatetodescriptor' is disabled on mainnet after block 3000");
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
+
     const auto num_blocks{self.Arg<int>("num_blocks")};
     const auto max_tries{self.Arg<uint64_t>("maxtries")};
 
@@ -257,8 +263,13 @@ static RPCHelpMan generatetodescriptor()
 static RPCHelpMan generate()
 {
     return RPCHelpMan{"generate", "has been replaced by the -generate cli option. Refer to -help for more information.", {}, {}, RPCExamples{""}, [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue {
-        throw JSONRPCError(RPC_METHOD_NOT_FOUND, self.ToString());
-    }};
+    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
+    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
+        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generate' is disabled on mainnet after block 3000");
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
+    throw JSONRPCError(RPC_METHOD_NOT_FOUND, self.ToString());
+}};
 }
 
 static RPCHelpMan generatetoaddress()
@@ -283,6 +294,12 @@ static RPCHelpMan generatetoaddress()
                 },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {
+    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
+    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
+        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generatetoaddress' is disabled on mainnet after block 3000");
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
+
     const int num_blocks{request.params[0].getInt<int>()};
     const uint64_t max_tries{request.params[2].isNull() ? DEFAULT_MAX_TRIES : request.params[2].getInt<int>()};
 
@@ -330,6 +347,12 @@ static RPCHelpMan generateblock()
         },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
 {
+    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
+    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
+        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generateblock' is disabled on mainnet after block 3000");
+    }
+    // ─────────────────────────────────────────────────────────────────────────────
+
     const auto address_or_descriptor = request.params[0].get_str();
     CScript coinbase_output_script;
     std::string error;
@@ -492,7 +515,6 @@ static RPCHelpMan getmininginfo()
     };
 }
 
-
 // NOTE: Unlike wallet RPC (which use BTC values), mining RPCs follow GBT (BIP 22) in using satoshi amounts
 static RPCHelpMan prioritisetransaction()
 {
@@ -576,7 +598,6 @@ static RPCHelpMan getprioritisedtransactions()
         },
     };
 }
-
 
 // NOTE: Assumes a conclusive result; if result is inconclusive, it must be handled by caller
 static UniValue BIP22ValidationResult(const BlockValidationState& state)
