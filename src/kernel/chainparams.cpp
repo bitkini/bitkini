@@ -120,8 +120,10 @@ public:
         pchMessageStart[3] = 0x49; // 'I'
         nDefaultPort = 6969; // Keep it sexy
         nPruneAfterHeight = 100000;
-        m_assumed_blockchain_size = 720;
-        m_assumed_chain_state_size = 14;
+
+        // Blockchain Size
+        m_assumed_blockchain_size = 50;
+        m_assumed_chain_state_size = 2;
 
         // Presale addresses
 
