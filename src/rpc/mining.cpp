@@ -233,43 +233,67 @@ static RPCHelpMan generatetodescriptor()
             }
         },
         RPCExamples{
-            "\nGenerate 11 blocks to mydesc\n" + HelpExampleCli("generatetodescriptor", "11 \"mydesc\"")},
+            "\nGenerate 11 blocks to mydesc\n" + HelpExampleCli("generatetodescriptor", "11 \"mydesc\"")
+        },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
-{
-    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
-    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
-        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generatetodescriptor' is disabled on mainnet after block 3000");
-    }
-    // ─────────────────────────────────────────────────────────────────────────────
+        {
+            // Grab node & chainman to inspect current height
+            NodeContext& node = EnsureAnyNodeContext(request.context);
+            ChainstateManager& chainman = EnsureChainman(node);
 
-    const auto num_blocks{self.Arg<int>("num_blocks")};
-    const auto max_tries{self.Arg<uint64_t>("maxtries")};
+            // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────
+            if (Params().GetChainType() != ChainType::REGTEST &&
+                chainman.ActiveChain().Height() >= 3000) {
+                throw JSONRPCError(
+                    RPC_MISC_ERROR,
+                    "RPC 'generatetodescriptor' is disabled on mainnet after block 3000"
+                );
+            }
+            // ─────────────────────────────────────────────────────────────────────
 
-    CScript coinbase_output_script;
-    std::string error;
-    if (!getScriptFromDescriptor(self.Arg<std::string>("descriptor"), coinbase_output_script, error)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, error);
-    }
+            const auto num_blocks{ self.Arg<int>("num_blocks") };
+            const auto max_tries{ self.Arg<uint64_t>("maxtries") };
 
-    NodeContext& node = EnsureAnyNodeContext(request.context);
-    Mining& miner = EnsureMining(node);
-    ChainstateManager& chainman = EnsureChainman(node);
+            CScript coinbase_output_script;
+            std::string error;
+            if (!getScriptFromDescriptor(self.Arg<std::string>("descriptor"), coinbase_output_script, error)) {
+                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, error);
+            }
 
-    return generateBlocks(chainman, miner, coinbase_output_script, num_blocks, max_tries);
-},
+            Mining& miner = EnsureMining(node);
+
+            return generateBlocks(chainman, miner, coinbase_output_script, num_blocks, max_tries);
+        },
     };
 }
 
 static RPCHelpMan generate()
 {
-    return RPCHelpMan{"generate", "has been replaced by the -generate cli option. Refer to -help for more information.", {}, {}, RPCExamples{""}, [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue {
-    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
-    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
-        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generate' is disabled on mainnet after block 3000");
-    }
-    // ─────────────────────────────────────────────────────────────────────────────
-    throw JSONRPCError(RPC_METHOD_NOT_FOUND, self.ToString());
-}};
+    return RPCHelpMan{
+        "generate",
+        "has been replaced by the -generate cli option. Refer to -help for more information.",
+        {},
+        {},
+        RPCExamples{""},
+        [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
+        {
+            // Grab node & chainman to inspect current height
+            NodeContext& node = EnsureAnyNodeContext(request.context);
+            ChainstateManager& chainman = EnsureChainman(node);
+
+            // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────
+            if (Params().GetChainType() != ChainType::REGTEST &&
+                chainman.ActiveChain().Height() >= 3000) {
+                throw JSONRPCError(
+                    RPC_MISC_ERROR,
+                    "RPC 'generate' is disabled on mainnet after block 3000"
+                );
+            }
+            // ─────────────────────────────────────────────────────────────────────
+
+            throw JSONRPCError(RPC_METHOD_NOT_FOUND, self.ToString());
+        }
+    };
 }
 
 static RPCHelpMan generatetoaddress()
@@ -291,31 +315,41 @@ static RPCHelpMan generatetoaddress()
             + HelpExampleCli("generatetoaddress", "11 \"myaddress\"")
             + "If you are using the " CLIENT_NAME " wallet, you can get a new address to send the newly generated bitcoin to with:\n"
             + HelpExampleCli("getnewaddress", "")
-                },
+         },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
-{
-    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
-    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
-        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generatetoaddress' is disabled on mainnet after block 3000");
-    }
-    // ─────────────────────────────────────────────────────────────────────────────
+        {
+            // Grab node & chainman to inspect current height
+            NodeContext& node = EnsureAnyNodeContext(request.context);
+            ChainstateManager& chainman = EnsureChainman(node);
 
-    const int num_blocks{request.params[0].getInt<int>()};
-    const uint64_t max_tries{request.params[2].isNull() ? DEFAULT_MAX_TRIES : request.params[2].getInt<int>()};
+            // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────
+            if (Params().GetChainType() != ChainType::REGTEST &&
+                chainman.ActiveChain().Height() >= 3000) {
+                throw JSONRPCError(
+                    RPC_MISC_ERROR,
+                    "RPC 'generatetoaddress' is disabled on mainnet after block 3000"
+                );
+            }
+            // ─────────────────────────────────────────────────────────────────────
 
-    CTxDestination destination = DecodeDestination(request.params[1].get_str());
-    if (!IsValidDestination(destination)) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Error: Invalid address");
-    }
+            const int num_blocks{ request.params[0].getInt<int>() };
+            const uint64_t max_tries{
+                request.params[2].isNull()
+                  ? DEFAULT_MAX_TRIES
+                  : request.params[2].getInt<int>()
+            };
 
-    NodeContext& node = EnsureAnyNodeContext(request.context);
-    Mining& miner = EnsureMining(node);
-    ChainstateManager& chainman = EnsureChainman(node);
+            CTxDestination destination = DecodeDestination(request.params[1].get_str());
+            if (!IsValidDestination(destination)) {
+                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Error: Invalid address");
+            }
 
-    CScript coinbase_output_script = GetScriptForDestination(destination);
+            Mining& miner = EnsureMining(node);
 
-    return generateBlocks(chainman, miner, coinbase_output_script, num_blocks, max_tries);
-},
+            CScript coinbase_output_script = GetScriptForDestination(destination);
+
+            return generateBlocks(chainman, miner, coinbase_output_script, num_blocks, max_tries);
+        },
     };
 }
 
@@ -346,92 +380,93 @@ static RPCHelpMan generateblock()
             + HelpExampleCli("generateblock", R"("myaddress" '["rawtx", "mempool_txid"]')")
         },
         [&](const RPCHelpMan& self, const JSONRPCRequest& request) -> UniValue
-{
-    // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────────────
-    if (Params().GetChainType() != ChainType::REGTEST && ::ChainActive().Height() >= 3000) {
-        throw JSONRPCError(RPC_MISC_ERROR, "RPC 'generateblock' is disabled on mainnet after block 3000");
-    }
-    // ─────────────────────────────────────────────────────────────────────────────
+        {
+            // ─── BLOCK‐3000 SAFETY CHECK ─────────────────────────────────────────
+            NodeContext& node = EnsureAnyNodeContext(request.context);
+            ChainstateManager& chainman = EnsureChainman(node);
+            if (Params().GetChainType() != ChainType::REGTEST
+                && chainman.ActiveChain().Height() >= 3000) {
+                throw JSONRPCError(
+                    RPC_MISC_ERROR,
+                    "RPC 'generateblock' is disabled on mainnet after block 3000"
+                );
+            }
+            // ─────────────────────────────────────────────────────────────────────
 
-    const auto address_or_descriptor = request.params[0].get_str();
-    CScript coinbase_output_script;
-    std::string error;
-
-    if (!getScriptFromDescriptor(address_or_descriptor, coinbase_output_script, error)) {
-        const auto destination = DecodeDestination(address_or_descriptor);
-        if (!IsValidDestination(destination)) {
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Error: Invalid address or descriptor");
-        }
-
-        coinbase_output_script = GetScriptForDestination(destination);
-    }
-
-    NodeContext& node = EnsureAnyNodeContext(request.context);
-    Mining& miner = EnsureMining(node);
-    const CTxMemPool& mempool = EnsureMemPool(node);
-
-    std::vector<CTransactionRef> txs;
-    const auto raw_txs_or_txids = request.params[1].get_array();
-    for (size_t i = 0; i < raw_txs_or_txids.size(); i++) {
-        const auto& str{raw_txs_or_txids[i].get_str()};
-
-        CMutableTransaction mtx;
-        if (auto hash{uint256::FromHex(str)}) {
-            const auto tx{mempool.get(*hash)};
-            if (!tx) {
-                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Transaction %s not in mempool.", str));
+            const auto address_or_descriptor = request.params[0].get_str();
+            CScript coinbase_output_script;
+            std::string error;
+            if (!getScriptFromDescriptor(address_or_descriptor, coinbase_output_script, error)) {
+                const auto destination = DecodeDestination(address_or_descriptor);
+                if (!IsValidDestination(destination)) {
+                    throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Error: Invalid address or descriptor");
+                }
+                coinbase_output_script = GetScriptForDestination(destination);
             }
 
-            txs.emplace_back(tx);
+            Mining& miner = EnsureMining(node);
+            const CTxMemPool& mempool = EnsureMemPool(node);
 
-        } else if (DecodeHexTx(mtx, str)) {
-            txs.push_back(MakeTransactionRef(std::move(mtx)));
+            std::vector<CTransactionRef> txs;
+            const auto raw_txs_or_txids = request.params[1].get_array();
+            for (size_t i = 0; i < raw_txs_or_txids.size(); i++) {
+                const auto& str = raw_txs_or_txids[i].get_str();
+                CMutableTransaction mtx;
+                if (auto hash = uint256::FromHex(str)) {
+                    const auto tx = mempool.get(*hash);
+                    if (!tx) {
+                        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY,
+                            strprintf("Transaction %s not in mempool.", str));
+                    }
+                    txs.emplace_back(tx);
+                } else if (DecodeHexTx(mtx, str)) {
+                    txs.push_back(MakeTransactionRef(std::move(mtx)));
+                } else {
+                    throw JSONRPCError(RPC_DESERIALIZATION_ERROR,
+                        strprintf("Transaction decode failed for %s. Make sure the tx has at least one input.", str));
+                }
+            }
 
-        } else {
-            throw JSONRPCError(RPC_DESERIALIZATION_ERROR, strprintf("Transaction decode failed for %s. Make sure the tx has at least one input.", str));
-        }
-    }
+            const bool process_new_block = request.params[2].isNull() ? true : request.params[2].get_bool();
+            CBlock block;
 
-    const bool process_new_block{request.params[2].isNull() ? true : request.params[2].get_bool()};
-    CBlock block;
+            {
+                // Original logic; replace chainman.GetMutex() with cs_main
+                LOCK(cs_main);
+                std::unique_ptr<BlockTemplate> block_template{
+                    miner.createNewBlock({ .use_mempool = false, .coinbase_output_script = coinbase_output_script })
+                };
+                CHECK_NONFATAL(block_template);
+                block = block_template->getBlock();
 
-    ChainstateManager& chainman = EnsureChainman(node);
-    {
-        LOCK(chainman.GetMutex());
-        {
-            std::unique_ptr<BlockTemplate> block_template{miner.createNewBlock({.use_mempool = false, .coinbase_output_script = coinbase_output_script})};
-            CHECK_NONFATAL(block_template);
+                CHECK_NONFATAL(block.vtx.size() == 1);
 
-            block = block_template->getBlock();
-        }
+                // Add transactions
+                block.vtx.insert(block.vtx.end(), txs.begin(), txs.end());
+                RegenerateCommitments(block, chainman);
 
-        CHECK_NONFATAL(block.vtx.size() == 1);
+                if (BlockValidationState state{
+                        TestBlockValidity(chainman.ActiveChainstate(), block, /*check_pow=*/false, /*check_merkle_root=*/false)
+                    }; !state.IsValid()) {
+                    throw JSONRPCError(RPC_VERIFY_ERROR, strprintf("TestBlockValidity failed: %s", state.ToString()));
+                }
+            }
 
-        // Add transactions
-        block.vtx.insert(block.vtx.end(), txs.begin(), txs.end());
-        RegenerateCommitments(block, chainman);
+            std::shared_ptr<const CBlock> block_out;
+            uint64_t max_tries = DEFAULT_MAX_TRIES;
+            if (!GenerateBlock(chainman, std::move(block), max_tries, block_out, process_new_block) || !block_out) {
+                throw JSONRPCError(RPC_MISC_ERROR, "Failed to make block.");
+            }
 
-        if (BlockValidationState state{TestBlockValidity(chainman.ActiveChainstate(), block, /*check_pow=*/false, /*check_merkle_root=*/false)}; !state.IsValid()) {
-            throw JSONRPCError(RPC_VERIFY_ERROR, strprintf("TestBlockValidity failed: %s", state.ToString()));
-        }
-    }
-
-    std::shared_ptr<const CBlock> block_out;
-    uint64_t max_tries{DEFAULT_MAX_TRIES};
-
-    if (!GenerateBlock(chainman, std::move(block), max_tries, block_out, process_new_block) || !block_out) {
-        throw JSONRPCError(RPC_MISC_ERROR, "Failed to make block.");
-    }
-
-    UniValue obj(UniValue::VOBJ);
-    obj.pushKV("hash", block_out->GetHash().GetHex());
-    if (!process_new_block) {
-        DataStream block_ser;
-        block_ser << TX_WITH_WITNESS(*block_out);
-        obj.pushKV("hex", HexStr(block_ser));
-    }
-    return obj;
-},
+            UniValue obj(UniValue::VOBJ);
+            obj.pushKV("hash", block_out->GetHash().GetHex());
+            if (!process_new_block) {
+                DataStream block_ser;
+                block_ser << TX_WITH_WITNESS(*block_out);
+                obj.pushKV("hex", HexStr(block_ser));
+            }
+            return obj;
+        },
     };
 }
 
