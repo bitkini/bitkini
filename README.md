@@ -24,6 +24,7 @@ The fastest way to get started is to grab the **prebuilt GUI wallet** for Window
 
 With the Bitkini Core wallet you can:
 - Create new wallets & addresses
+- Sync with the Network (just like Bitcoin Core)
 - Send and receive $KINI
 - Run a full node (optional)
 - No command line needed
