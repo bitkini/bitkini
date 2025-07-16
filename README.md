@@ -1,79 +1,99 @@
-Bitcoin Core integration/staging tree
-=====================================
+<p align="center">
+  <img src="https://bitkini.lol/assets/images/bitkini-banner.jpg" alt="Bitkini Banner" width="720"/>
+</p>
 
-https://bitcoincore.org
+# Bitkini Core ($KINI)
 
-For an immediately usable, binary version of the Bitcoin Core software, see
-https://bitcoincore.org/en/download/.
+**Bitkini** is a lightweight, meme-tier Bitcoin fork built for sunseekers, cypherpunks, and hash-slingers.  
+Block time: **60 seconds**  
+Block reward: **69 $KINI**  
+Halving: **Every 210,000 blocks (~145 days)**  
+Max supply: **31,351,500 $KINI (hard cap)**  
+Consensus: **Proof-of-Work (SHA256d)**  
+Difficulty Adjustment: **Every block (Dogecoin-style)**  
 
-What is Bitcoin Core?
----------------------
+This is a living blockchain. Fast blocks, scarce supply, real mining.  
+A party chain you can build, mine, and run.
 
-Bitcoin Core connects to the Bitcoin peer-to-peer network to download and fully
-validate blocks and transactions. It also includes a wallet and graphical user
-interface, which can be optionally built.
+---
 
-Further information about Bitcoin Core is available in the [doc folder](/doc).
+## 🔸 Download Wallet (Windows)
 
-License
--------
+The fastest way to get started is to grab the **prebuilt GUI wallet** for Windows:  
+👉 [https://bitkini.lol](https://bitkini.lol)
 
-Bitcoin Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see https://opensource.org/license/MIT.
+With the Bitkini Core wallet you can:
+- Create new wallets & addresses
+- Send and receive $KINI
+- Run a full node (optional)
+- No command line needed
 
-Development Process
--------------------
+If you're paranoid (good), feel free to run it in a Windows VM for security.
+Please note the wallet is unsigned - we are waiting for a Code Signing Certificate from the foundation.
 
-The `master` branch is regularly built (see `doc/build-*.md` for instructions) and tested, but it is not guaranteed to be
-completely stable. [Tags](https://github.com/bitcoin/bitcoin/tags) are created
-regularly from release branches to indicate new official, stable release versions of Bitcoin Core.
+---
 
-The https://github.com/bitcoin-core/gui repository is used exclusively for the
-development of the GUI. Its master branch is identical in all monotree
-repositories. Release branches and tags do not exist, so please do not fork
-that repository unless it is for development reasons.
+## 🧱 Run a Full Node
 
-The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md)
-and useful hints for developers can be found in [doc/developer-notes.md](doc/developer-notes.md).
+Want to build from source, run a node, or contribute directly to the chain?
 
-Testing
--------
+Follow our official guide to compile and run Bitkini Core on **Ubuntu 24.04 LTS**:  
+👉 [https://bitkini.lol/full-node](https://bitkini.lol/full-node)
 
-Testing and code review is the bottleneck for development; we get more pull
-requests than we can review and test on short notice. Please be patient and help out by testing
-other people's pull requests, and remember this is a security-critical project where any mistake might cost people
-lots of money.
+This guide includes:
+- Dependencies & build steps  
+- Starting your node with `bitkinid`  
+- Connecting to peers and syncing  
+- Wallet tips for devs & power users  
 
-### Automated Testing
+---
 
-Developers are strongly encouraged to write [unit tests](src/test/README.md) for new code, and to
-submit new unit tests for old code. Unit tests can be compiled and run
-(assuming they weren't disabled during the generation of the build system) with: `ctest`. Further details on running
-and extending unit tests can be found in [/src/test/README.md](/src/test/README.md).
+## 🔄 Presale & Funding
 
-There are also [regression and integration tests](/test), written
-in Python.
-These tests can be run (if the [test dependencies](/test) are installed) with: `build/test/functional/test_runner.py`
-(assuming `build` is your build directory).
+Bitkini is a grassroots project — no VC, no premine shenanigans.  
+We’re raising funds for **exchange listings** through an on-chain **BTC → $KINI** swap.
 
-The CI (Continuous Integration) systems make sure that every pull request is tested on Windows, Linux, and macOS.
-The CI must pass on all commits before merge to avoid unrelated CI failures on new pull requests.
+Swap instantly at:  
+👉 [https://bitkini.lol](https://bitkini.lol)
 
-### Manual Quality Assurance (QA) Testing
+You’ll receive $KINI in your wallet automatically after 2 confirmations.
 
-Changes should be tested by somebody other than the developer who wrote the
-code. This is especially important for large or high-risk changes. It is useful
-to add a test plan to the pull request description if testing the changes is
-not straightforward.
+This supports the project **directly** — listings, infrastructure, and growth.
 
-Translations
-------------
+---
 
-Changes to translations as well as new translations can be submitted to
-[Bitcoin Core's Transifex page](https://explore.transifex.com/bitcoin/bitcoin/).
+## 🛠️ Build Instructions
 
-Translations are periodically pulled from Transifex and merged into the git repository. See the
-[translation process](doc/translation_process.md) for details on how this works.
+If you want to compile from source manually, follow the standard Bitcoin Core build process.  
+We’ve forked from Bitcoin Core v29 — all modern BIPs (SegWit, Taproot, etc.) are live.
 
-**Important**: We do not accept translation changes as GitHub pull requests because the next
-pull from Transifex would automatically overwrite them again.
+Build guides are located in [`/doc/`](doc/). Start with:
+- [`build-unix.md`](doc/build-unix.md)
+- [`build-windows.md`](doc/build-windows.md)
+
+---
+
+## 💬 Community & Support
+
+We're fully active on:
+- Telegram: [https://t.me/BitkiniChaini](https://t.me/BitkiniChain)
+- X / Twitter: [https://x.com/BitkiniChainl](https://x.com/BitkiniChain)
+- Discord: [https://discord.com/invite/yseJtyPbbU](https://discord.com/invite/yseJtyPbbU)
+- Explorer: [https://explorer.bitkini.lol](https://explorer.bitkini.lol)
+- Mining Pool: [https://pool.bitkini.lol/](https://pool.bitkini.lol/)
+
+Feel free to post issues, PRs, or memes.  
+This chain isn’t a whitepaper — it’s a working codebase.
+
+---
+
+## ⚖️ License
+
+Bitkini Core is released under the [MIT license](COPYING).
+
+---
+
+## 🔒 Heads-Up
+
+This is a security-sensitive project.  
+If you’re submitting changes, **test them well**. If you find bugs, report them.  
